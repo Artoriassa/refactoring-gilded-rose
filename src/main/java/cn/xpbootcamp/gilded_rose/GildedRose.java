@@ -10,45 +10,70 @@ class GildedRose {
 
     public void update_quality() {
         for (Item item : items) {
-            if (!item.name.equals(AGED_BRIE) && !item.name.equals(BACKSTAGE_PASSES)) {
-                if (item.quality > 0 && !item.name.equals(SULFURAS)) {
+            if (isNotAgedBrie(item) && !isBackStagePasses(item)) {
+                if (isNotSulfuras(item) && qualityGreaterThanZero(item)) {
                     item.quality--;
                 }
             } else {
-                if (item.quality < 50) {
+                if (qualityLessThanFifty(item)) {
                     item.quality++;
-
-                    if (item.name.equals(BACKSTAGE_PASSES)) {
-                        if (item.sell_in < 11) {
+                    if (isBackStagePasses(item)) {
+                        if (sellInLessEleven(item)) {
                             item.quality++;
                         }
 
-                        if (item.sell_in < 6) {
+                        if (sellInLessSix(item)) {
                             item.quality++;
                         }
                     }
                 }
             }
 
-            if (!item.name.equals(SULFURAS)) {
+            if (isNotSulfuras(item)) {
                 item.sell_in--;
             }
 
-            if (item.sell_in < 0) {
-                if (!item.name.equals(AGED_BRIE)) {
-                    if (!item.name.equals(BACKSTAGE_PASSES)) {
-                        if (item.quality > 0 && !item.name.equals(SULFURAS)) {
+            if (sellInLessThanZero(item)) {
+                if (isNotAgedBrie(item)) {
+                    if (!isBackStagePasses(item)) {
+                        if (isNotSulfuras(item) && qualityGreaterThanZero(item)) {
                             item.quality--;
                         }
                     } else {
                         item.quality = 0;
                     }
                 } else {
-                    if (item.quality < 50) {
+                    if (qualityLessThanFifty(item)) {
                         item.quality++;
                     }
                 }
             }
         }
+    }
+
+    private static boolean sellInLessThanZero(Item item) {
+        return item.sell_in < 0;
+    }
+
+    private static boolean sellInLessSix(Item item) {
+        return item.sell_in < 6;
+    }
+    private static boolean sellInLessEleven(Item item) {
+        return item.sell_in < 11;
+    }
+    private static boolean qualityLessThanFifty(Item item) {
+        return item.quality < 50;
+    }
+    private static boolean qualityGreaterThanZero(Item item) {
+        return item.quality > 0;
+    }
+    private static boolean isNotSulfuras(Item item) {
+        return !item.name.equals(SULFURAS);
+    }
+    private static boolean isNotAgedBrie(Item item) {
+        return !item.name.equals(AGED_BRIE);
+    }
+    private static boolean isBackStagePasses(Item item) {
+        return item.name.equals(BACKSTAGE_PASSES);
     }
 }
